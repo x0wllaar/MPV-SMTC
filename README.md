@@ -10,6 +10,13 @@ Integrate MPV with Windows' System Media Transport Controls
 * Unpack the archive into this folder (so that the main.lua file is inside the folder, for example "SMTC/main.lua")
 * Use MPV as usual, you should start seeing messages from both the lua script and the executable when you run MPV from the command line 
 
+## TODO
+
+- [ ] Code cleanup and adding comments
+- [ ] For seekable files, add Fast Forward / Rewind buttons
+- [ ] For seekable files, add timeline to the SMTC
+- [ ] Better metadata handling: most notably, thumbnails
+
 ## Contributing
 
 ### Prerequisites
