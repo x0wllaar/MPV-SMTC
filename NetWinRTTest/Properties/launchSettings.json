@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MPV-SMTC": {
+      "commandName": "Project",
+      "commandLineArgs": "-w -loglevel=0"
+    }
+  }
+}
