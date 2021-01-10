@@ -37,6 +37,7 @@ the entire .NET 5 runtime in them.
 * [Windows Runtime](https://developer.microsoft.com/en-us/windows/) - The actual API used for SMTC
 * [Json.NET](https://www.newtonsoft.com/json) - Used for JSON Parsing
 * [Serilog](https://github.com/serilog/serilog) - Used for logging
+* [Command Line Parser](https://github.com/commandlineparser/commandline) - Used for parsing arguments
 
 ## Versioning
 
