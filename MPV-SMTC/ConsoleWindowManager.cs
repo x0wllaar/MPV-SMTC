@@ -11,6 +11,10 @@ namespace MPVSMTC
         [DllImport("user32.dll")]
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool AllocConsole();
+
         public enum ShowWindowCommands {
             SW_FORCEMINIMIZE = 11,
             SW_HIDE = 0,
@@ -42,6 +46,7 @@ namespace MPVSMTC
         {
             return ShowWindowM(ShowWindowCommands.SW_SHOW);
         }
+
 
     }
 }

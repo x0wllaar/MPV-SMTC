@@ -7,9 +7,10 @@ namespace MPVSMTC
 {
     public class Options
     {
-        [Option('w', "showwindow", Required = false, HelpText = "Hide command line window on start (ignored as of now)", Default = false)]
-        public bool ShowWindow { get; set; }
         
+        [Option ('s', "showwindow", Required = false, HelpText = "Force show console window", Default = false)]
+        public bool ShowWindow { get; set; }
+
         [Option('p', "pipename", Required = false, HelpText = "Name of the IPC named pipe", Default = @"mpvsocket")]
         public string PipeName { get; set; }
 
@@ -27,7 +28,6 @@ namespace MPVSMTC
 
     class Program
     {
-
         static void ExitSuccessMPVDisconnect() {
             Log.Information("MPV Disconnected");
             Environment.Exit(0);
@@ -38,6 +38,11 @@ namespace MPVSMTC
             Parser.Default.ParseArguments<Options>(args).WithParsed<Options>((options) => {
 
                 var log = new LoggerConfiguration();
+
+                if (options.ShowWindow)
+                {
+                    ConsoleWindowManager.AllocConsole();
+                }
                 
                 if (options.LogFile is not null)
                 {

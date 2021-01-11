@@ -39,7 +39,6 @@ mp.command_native({
     detach = true,
     args = {
         exe_path, 
-        "-w", 
         "--pipename=" .. pipe_name, 
         "--loglevel=" .. LOG_LEVEL},
 })
