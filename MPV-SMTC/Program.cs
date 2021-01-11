@@ -7,7 +7,7 @@ namespace MPVSMTC
 {
     public class Options
     {
-        [Option('w', "showwindow", Required = false, HelpText = "Hide command line window on start", Default = false)]
+        [Option('w', "showwindow", Required = false, HelpText = "Hide command line window on start (ignored as of now)", Default = false)]
         public bool ShowWindow { get; set; }
         
         [Option('p', "pipename", Required = false, HelpText = "Name of the IPC named pipe", Default = @"mpvsocket")]
@@ -36,15 +36,6 @@ namespace MPVSMTC
         static async Task Main(string[] args)
         {
             Parser.Default.ParseArguments<Options>(args).WithParsed<Options>((options) => {
-
-                if (options.ShowWindow)
-                {
-                    ConsoleWindowManager.UnhideWindow();
-                }
-                else
-                {
-                    ConsoleWindowManager.HideWindow();
-                }
 
                 var log = new LoggerConfiguration();
                 
