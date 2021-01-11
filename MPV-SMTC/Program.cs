@@ -41,7 +41,11 @@ namespace MPVSMTC
 
                 if (options.ShowWindow)
                 {
-                    ConsoleWindowManager.AllocConsole();
+                    ConsoleWindowManager.ConnectConsole();
+                }
+                else
+                {
+                    ConsoleWindowManager.AttachConsole(ConsoleWindowManager.ATTACH_PARENT_PROCESS);
                 }
                 
                 if (options.LogFile is not null)

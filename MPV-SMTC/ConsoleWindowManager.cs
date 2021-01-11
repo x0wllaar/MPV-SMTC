@@ -15,6 +15,10 @@ namespace MPVSMTC
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool AllocConsole();
 
+        [DllImport("kernel32.dll")]
+        public static extern bool AttachConsole(int dwProcessId);
+        public const int ATTACH_PARENT_PROCESS = -1;
+
         public enum ShowWindowCommands {
             SW_FORCEMINIMIZE = 11,
             SW_HIDE = 0,
@@ -47,6 +51,16 @@ namespace MPVSMTC
             return ShowWindowM(ShowWindowCommands.SW_SHOW);
         }
 
-
+        public static bool ConnectConsole()
+        {
+            if (!AttachConsole(ATTACH_PARENT_PROCESS))
+            {
+                return AllocConsole();
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
