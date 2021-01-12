@@ -13,8 +13,8 @@ Integrate MPV with Windows' System Media Transport Controls
 ## TODO
 
 - [ ] Code cleanup and adding comments
-- [ ] For seekable files, add Fast Forward / Rewind buttons
-- [ ] For seekable files, add timeline to the SMTC
+- [ ] ~~For seekable files, add Fast Forward / Rewind buttons~~ [According to Microsoft's github, not possible on desktop verisons of Windows](https://github.com/Microsoft/Windows-universal-samples/issues/537)
+- [ ] ~~For seekable files, add timeline to the SMTC~~ [According to Microsoft's github, not possible on desktop verisons of Windows](https://github.com/Microsoft/Windows-universal-samples/issues/537)
 - [ ] Better metadata handling: most notably, thumbnails
 
 ## Contributing
