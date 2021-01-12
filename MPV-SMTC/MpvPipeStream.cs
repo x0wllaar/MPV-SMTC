@@ -25,15 +25,20 @@ namespace MPVSMTC
         private readonly NamedPipeClientStream PipeClient;
         private StreamWriter PipeWriter;
         private StreamReader PipeReader;
+        private readonly int ConnectionTimeout;
 
         private readonly Dictionary<long, TaskCompletionSource<dynamic>> PromiseMap;
         private readonly Dictionary<string, HashSet<Action<dynamic>>> EventHandlerMap;
         private readonly Dictionary<string, HashSet<Action<dynamic>>> PropertyObserverMap;
         private readonly Dictionary<string, int> PropertyIDMap;
+        
 
-        private readonly Action OnDisconnect;
+        public delegate void MPVPipeEvent();
 
-        public MpvPipeStream(string PipeName, Action OnDisconnect)
+        public event MPVPipeEvent OnDisconnect;
+        public event MPVPipeEvent OnConnectionTimeout;
+
+        public MpvPipeStream(string PipeName, int ConnectionTimeout = 3000)
         {
             this.PipeClient = new NamedPipeClientStream(".", PipeName, PipeDirection.InOut,
                 PipeOptions.Asynchronous | PipeOptions.CurrentUserOnly);
@@ -43,12 +48,17 @@ namespace MPVSMTC
             this.PropertyObserverMap = new Dictionary<string, HashSet<Action<dynamic>>>();
             this.PropertyIDMap = new Dictionary<string, int>();
 
-            this.OnDisconnect = OnDisconnect;
+            this.ConnectionTimeout = ConnectionTimeout;
         }
 
         public void Connect()
         {
-            this.PipeClient.Connect();
+            if (!Task.Run(() => { this.PipeClient.Connect(); }).Wait(ConnectionTimeout))
+            {
+                this.OnConnectionTimeout?.Invoke();
+                return;
+            }
+
             this.PipeClient.ReadMode = PipeTransmissionMode.Byte;
 
             this.PipeWriter = new StreamWriter(this.PipeClient)
@@ -144,7 +154,7 @@ namespace MPVSMTC
                 }
             }
 
-            this.OnDisconnect();
+            this.OnDisconnect?.Invoke();
 
         }
 

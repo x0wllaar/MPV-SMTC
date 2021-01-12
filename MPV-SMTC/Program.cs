@@ -14,7 +14,7 @@ namespace MPVSMTC
         [Option('p', "pipename", Required = false, HelpText = "Name of the IPC named pipe", Default = @"mpvsocket")]
         public string PipeName { get; set; }
 
-        [Option('f', "usefilemetadata", Required = false, HelpText = "Hide command line window on start", Default = false)]
+        [Option('f', "usefilemetadata", Required = false, HelpText = "When playing a local file, ask Windows to load metadata directly from the file", Default = false)]
         public bool UseFileMetadata { get; set; }
 
         [Option("logfile", Required = false, HelpText = "File to save log to", Default = null)]
@@ -24,6 +24,9 @@ namespace MPVSMTC
             Default = (int)Serilog.Events.LogEventLevel.Information)]
         public int LogLevel { get; set; }
 
+        [Option('t', "timeout", Required = false, HelpText = "Timeout for pipe connection (in ms)", Default = 3000)]
+        public int ConnectionTimeout { get; set; }
+
     }
 
     class Program
@@ -31,6 +34,12 @@ namespace MPVSMTC
         static void ExitSuccessMPVDisconnect() {
             Log.Information("MPV Disconnected");
             Environment.Exit(0);
+        }
+
+        static void ExitErrorMPVTimeout()
+        {
+            Log.Information("Could not connect to MPV");
+            Environment.Exit(1);
         }
 
         static async Task Main(string[] args)
@@ -62,7 +71,9 @@ namespace MPVSMTC
 
                 Log.Logger = log.CreateLogger();
 
-                var conn = new MPVSMTCConnector(options.PipeName, ExitSuccessMPVDisconnect, options.UseFileMetadata);
+                var conn = new MPVSMTCConnector(options.PipeName, options.ConnectionTimeout, options.UseFileMetadata);
+                conn.OnConnectionTimeout += ExitErrorMPVTimeout;
+                conn.OnDisconnect += ExitSuccessMPVDisconnect;
                 conn.Start();
             });
             

@@ -23,10 +23,15 @@ namespace MPVSMTC
 
         private readonly bool GetDataFromFiles;
 
-        public MPVSMTCConnector(string pipe_path, Action OnDisconnect, bool GetDataFromFiles)
+        public event MpvPipeStream.MPVPipeEvent OnDisconnect;
+        public event MpvPipeStream.MPVPipeEvent OnConnectionTimeout;
+
+        public MPVSMTCConnector(string pipe_path, int ConnectionTimeout = 3000, bool GetDataFromFiles = false)
         {
             this.pipe_path = pipe_path;
-            this.mpv_stream = new MpvPipeStream(this.pipe_path, OnDisconnect);
+            this.mpv_stream = new MpvPipeStream(this.pipe_path, ConnectionTimeout);
+            this.mpv_stream.OnConnectionTimeout += () => { this.OnConnectionTimeout?.Invoke(); };
+            this.mpv_stream.OnDisconnect += () => { this.OnDisconnect?.Invoke(); };
 
             this.player = new MediaPlayer();
             this.player.CommandManager.IsEnabled = false;
