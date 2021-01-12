@@ -32,11 +32,10 @@ mp.set_property("input-ipc-server", pipe_addr)
 script_dir = mp.get_script_directory()
 exe_path = script_dir .. "/" .. REL_EXE_LOCATION
 mp.msg.info("Starting MPV-SMTC executable")
-mp.command_native({
+mp.command_native_async({
     name = "subprocess",
     playback_only = false,
     capture_stdout = false,
-    detach = true,
     args = {
         exe_path, 
         "--pipename=" .. pipe_name, 
